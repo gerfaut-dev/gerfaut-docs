@@ -1,0 +1,44 @@
+name: CI
+
+# The site checked the way Mintlify builds it, on every push to main,
+# every pull request, and on demand (Actions, CI, Run workflow): the
+# build in strict mode, then every internal link, with the anchor after
+# a # and the target of each redirect in docs.json. Without
+# --check-anchors, a link to a heading that no longer exists passes.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A pull request pushed again stops its previous run, which nobody will
+# merge. Every other run has a group of its own: GitHub would otherwise
+# drop a pending run on main when a newer one arrives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # One version of the CLI, so that a new release cannot turn a run
+      # red on its own: it changes here, on purpose.
+      MINT: mint@4.2.1072
+      # No usage data from CI.
+      DO_NOT_TRACK: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.0
+      - name: Validate the build
+        run: npx --yes "$MINT" validate
+      - name: Check the links
+        run: npx --yes "$MINT" broken-links --check-anchors --check-redirects

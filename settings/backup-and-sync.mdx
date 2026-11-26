@@ -1,0 +1,89 @@
+---
+title: "Backup and sync"
+description: "Save every wallet you watch in an encrypted Gerfaut backup file or an animated QR code, and restore it on another phone or computer."
+---
+
+Seal every wallet you watch in a backup under a password of your own, as a file or an animated QR code, and restore it on another phone or computer. A backup holds descriptors, addresses and names, never a private key or a seed.
+
+Open **Settings** > **Backup & sync**.
+
+<Tabs>
+  <Tab title="Android">
+    <Frame caption="A backup carries descriptors and addresses under a password, never a private key or a seed.">
+      <img src="/images/android/settings-backup.webp" alt="The Backup & sync section on Android with the explanation and the Export and Restore buttons." width="360" />
+    </Frame>
+  </Tab>
+  <Tab title="Desktop">
+    <Frame caption="A backup carries descriptors and addresses under a password, never a private key or a seed, and moves wallets between phone and desktop.">
+      <img src="/images/desktop/settings-backup.webp" alt="The Backup & sync section of the desktop settings: the explanation and the Export and Restore buttons." />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Export a backup
+
+<Warning>
+Nobody can recover the password. Someone who copies the file can try passwords offline, so pick a long passphrase of several words.
+</Warning>
+
+<Steps>
+  <Step title="Select Export…">
+    Gerfaut opens `Export a backup`.
+  </Step>
+  <Step title="Check what goes in">
+    When all your wallets are on the selected network, `Wallets` only counts them, such as `All wallets (1)`. Otherwise, keep `All wallets (5)` or select the option of the selected network alone, such as `Signet only (3)`. Select the `Include node settings` switch to add your backend, the certificates you accepted and the gap limit.
+  </Step>
+  <Step title="Pick a password">
+    Enter it in `Password` and `Confirm password`, then select **Create backup**.
+  </Step>
+  <Step title="Save the file or show the QR code">
+    Select **Save file…** to write a `.gerfaut` file, or **Save file** and **Share** on Android. **Share** hands the file to the app you pick in the share sheet, and to no other app. Select **Show QR code** to show the backup as an animated QR code.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Android">
+    <Frame caption="The same backup leaves as a file or as an animated QR code, which the other device reads from any frame.">
+      <video autoPlay muted loop playsInline preload="metadata" className="phone-video" src="/videos/settings/export-a-backup-android.mp4" aria-label="Exporting a backup on Android: the page with All wallets (1) and both password fields filled, Create backup, then Show QR code and the animated QR code." />
+    </Frame>
+  </Tab>
+  <Tab title="Desktop">
+    <Frame caption="The same backup leaves as a file or as an animated QR code, which the other device reads from any frame.">
+      <video autoPlay muted loop playsInline preload="metadata" src="/videos/settings/export-a-backup-desktop.mp4" aria-label="Exporting a backup on desktop: the dialog with both password fields filled, Create backup, then Show QR code and the animated QR code." />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Restore a backup
+
+<Steps>
+  <Step title="Select Restore…">
+    Gerfaut opens `Restore a backup`.
+  </Step>
+  <Step title="Open the backup">
+    Select **Open a file…** (**Open a file** on Android) and pick the `.gerfaut` file. Or select **Scan a QR code** and keep the camera on the code until the counter reaches its total. One loop of the code is enough.
+  </Step>
+  <Step title="Enter the password">
+    Select **Open backup**. When the backup does not open, Gerfaut says why:
+
+    - **`Wrong password, or the file is damaged.`:** Enter the password again. A password shorter than eight characters always reads this, since no backup is sealed under one.
+    - **`This is not a Gerfaut backup, or it is damaged.`:** Check that you opened a `.gerfaut` file or a Gerfaut backup QR code. The password is not in question.
+    - **`This backup was made with a newer version of Gerfaut. Update Gerfaut to open it.`:** Update Gerfaut on [Android](/getting-started/install-android#update-gerfaut) or [desktop](/getting-started/install-desktop#update-gerfaut), then open the backup again.
+  </Step>
+  <Step title="Pick what to restore">
+    Gerfaut ticks every wallet this device does not watch yet, and marks the others `Already watched`. If the backup holds node settings, select the `Apply node settings` switch to take its backends and gap limit, and add the certificates it accepted. A certificate you already accepted on this device stays as it is.
+  </Step>
+  <Step title="Select the Restore button">
+    It counts the wallets, such as **Restore 2 wallets**. Gerfaut adds the wallets and syncs them.
+  </Step>
+</Steps>
+
+<Accordion title="Restore a backup with a wallet Gerfaut cannot watch">
+  A backup can hold a wallet Gerfaut refuses, such as one without a name or with a descriptor it cannot read. That wallet stays on the list, unticked, with `Cannot be restored` and the reason under its name.
+
+  Gerfaut restores the others. The confirmation then ends with `1 left out: Cold storage`, or with a count when several are left out.
+</Accordion>
+
+<Note>
+On Android, Gerfaut keeps its data out of the system backup and out of a transfer to a new phone. Keep a Gerfaut backup for a new phone.
+</Note>

@@ -1,0 +1,182 @@
+---
+title: "Backend"
+description: "Pick the network Gerfaut shows and where it reads the chain: the public servers, your own Esplora endpoint or your own Electrum server."
+---
+
+Point Gerfaut at your own node to keep your addresses to yourself, or stay on the public servers. Each network keeps its own backend.
+
+<Tabs>
+  <Tab title="Android">Select **More**, then **Settings**, then **Network**.</Tab>
+  <Tab title="Desktop">Select **Settings** at the bottom of the sidebar, then **Network**.</Tab>
+</Tabs>
+
+## Pick the network
+
+In the `Network` card, select `Mainnet`, `Signet`, `Testnet 4` or `Regtest`. Gerfaut shows the wallets of that network only, and names it in a badge unless it is mainnet. Regtest has no public server, so point it at your own node.
+
+<Tabs>
+  <Tab title="Android">
+    <Frame caption="Each network keeps its own backend: a public server, or an Esplora or Electrum instance on your own node.">
+      <img src="/images/android/settings-node.webp" alt="The Network section on Android: the network picker with Signet selected and the Backend card with Public API, My own Esplora, My own Electrum server, the Server list on Automatic and Save backend." width="360" />
+    </Frame>
+  </Tab>
+  <Tab title="Desktop">
+    <Frame caption="Each network keeps its own backend: a public server, or an Esplora or Electrum instance on your own node.">
+      <img src="/images/desktop/settings-node.webp" alt="The Network section of the desktop settings: the network picker with Signet selected, the Backend card with Public API and blockstream.info as the server, My own Esplora, My own Electrum server and Save backend." />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Use the public servers
+
+<Warning>
+The operator of each public server Gerfaut asks sees the addresses of your wallets and your IP address. While Live runs, it also sees how long Gerfaut stays connected.
+</Warning>
+
+The backend card, such as `Backend · Signet`, opens on `Public API`, with nothing to set up. Under `Server`, keep `Automatic`, or select one server, such as `mempool.space`, to make it the only one Gerfaut asks on that network.
+
+With `Automatic`, Gerfaut asks these servers:
+
+| Network | Syncs | Live |
+|---|---|---|
+| `Mainnet` | mempool.space, then blockstream.info, then mempool.emzy.de | Blockstream's Electrum servers, `blockstream.info:700` first |
+| `Signet` | mempool.space, then blockstream.info, then mempool.emzy.de | mempool.space's Electrum server |
+| `Testnet 4` | mempool.space, then mempool.emzy.de | mempool.space's Electrum server |
+
+Gerfaut moves to the next server only when one fails. The next sync starts with the server that answered.
+
+A server that was down or overloaded while another one answered moves to the end of the list for five minutes. Each new failure doubles that time, up to an hour.
+
+When the Electrum servers of the `Live` column fail, Live moves to the sync servers, in the same order. When the Live server reports no new block for two hours, Gerfaut compares it with another Electrum server of the same operator. Live moves to that server if its own lags two blocks or more.
+
+Once Live has connected, each sync goes to the Live server first, so your syncs show your addresses to a single operator. The [Broadcast](/everyday-use/broadcast-a-transaction) page sends your transactions to that operator first too.
+
+With Live on, the first sync after Gerfaut opens waits up to 20 seconds for Live to connect, so that it reaches the Live server too. Past that wait, it follows the order above.
+
+<Tabs>
+  <Tab title="Android">
+    <Frame caption="Picking one server makes it the only one Gerfaut asks on that network.">
+      <video autoPlay muted loop playsInline preload="metadata" className="phone-video" src="/videos/settings/pick-a-backend-android.mp4" aria-label="Picking a public server on Android: the Server list on Automatic, mempool.space, then Save backend and the Setting saved note." />
+    </Frame>
+  </Tab>
+  <Tab title="Desktop">
+    <Frame caption="Picking one server makes it the only one Gerfaut asks on that network.">
+      <video autoPlay muted loop playsInline preload="metadata" src="/videos/settings/pick-a-backend-desktop.mp4" aria-label="Picking a public server on desktop: the Server list on Automatic, mempool.space, then Save backend and the Setting saved note." />
+    </Frame>
+  </Tab>
+</Tabs>
+
+<AccordionGroup>
+  <Accordion title="Know what the public servers allow">
+    Public servers are free and need no account, but they promise nothing. Each operator sets its own limits and can change them at any time.
+
+    - **blockstream.info:** Its web API takes 700 requests an hour from one IP address. Blockstream publishes no limit for its Electrum servers.
+    - **mempool.space:** It publishes no limit. It refuses requests past its limit, and may ban an IP address that keeps going past it.
+    - **mempool.space on signet:** Its Electrum server follows 100 addresses per connection. Live leaves the others to the next sync.
+    - **Shared IP address:** Behind a VPN or a mobile carrier, other people can use up the same limit.
+
+    When a server limits requests, Gerfaut waits as long as the server asks, then asks once more. If the server asks for more than a minute, or refuses again, Gerfaut tries the next one. When none answers, the sync fails and says why.
+
+    On [your own node](#follow-more-addresses-on-your-own-node), no one else sees your addresses and you set the limits.
+  </Accordion>
+  <Accordion title="Know what a server cannot fake">
+    Gerfaut checks each confirmation a server reports against its block, so a server cannot make up a confirmation for free. The transaction must be in that block. On mainnet, the block header must also carry the work the network asked for at that height.
+
+    - **Electrum:** A confirmation in an older block, covered by the checkpoints built into Gerfaut, must also link block by block to the next checkpoint. No amount of work can forge it.
+    - **Esplora:** A confirmation rests on the work of its block alone. A confirmation in a block from the early years of bitcoin, when blocks took little work, costs a server little to forge.
+    - **Signet and testnet4:** Their blocks take too little work to prove anything, so Gerfaut checks only the easiest target of the network.
+
+    When a proof does not hold, Gerfaut drops that server's answer and asks the next server. If no other server answers, the sync fails with a reason that mentions a `false proof of a confirmation`, which means that server lies or is broken. Try again later, or connect [your own node](#connect-your-own-electrum-server).
+  </Accordion>
+  <Accordion title="Sync a wallet with tens of thousands of transactions">
+    The first sync of a very large wallet, or of one with many large inscriptions, can fail on an Esplora backend. Gerfaut then reports `Sync failed` with a reason such as:
+
+    - `the server sent more than 256 MiB of transactions for one sync`
+    - `the server sent an answer longer than 64 MiB`
+    - `the server lists more than 10000 transactions for one address`
+
+    Switch that network to [your own Electrum server](#connect-your-own-electrum-server). A public Electrum server may refuse the wallet too, since each one caps the transactions it lists for one address. On signet, mempool.space's Electrum server refuses an address with more than 500.
+  </Accordion>
+  <Accordion title="Fix a sync that reaches another network">
+    A sync that fails with `the server is on another network` reached a server of another chain, such as the signet port of your node entered for testnet4. Check which port your node serves for this network, then enter it again.
+  </Accordion>
+</AccordionGroup>
+
+## Connect your own Esplora
+
+<Steps>
+  <Step title="Select My own Esplora">
+    The `Server URL` field appears, for an address such as `https://node.example.org:3002/api`.
+  </Step>
+  <Step title="Enter the URL, or scan it">
+    Select **Scan** beside the field to read the QR code your node shows for its Esplora app.
+  </Step>
+  <Step title="Select Save backend">
+    Gerfaut uses it from the next sync.
+  </Step>
+</Steps>
+
+## Connect your own Electrum server
+
+<Warning>
+Leave `TLS` on. Without it, anyone on the path between your device and the server reads the addresses you watch.
+</Warning>
+
+<Steps>
+  <Step title="Select My own Electrum server">
+    Use it for electrs or Fulcrum.
+  </Step>
+  <Step title="Enter the host and the port">
+    Enter the `Host`, such as `node.example.org` or a `.onion` address reached [through Tor](/settings/tor), and the `Port`, `50002` by default. **Scan** reads the QR code your node shows for its Electrum app and fills both.
+  </Step>
+  <Step title="Select Save backend">
+    If the server answers and signs its own certificate, Gerfaut shows the certificate before it saves anything. See [Certificates](/settings/certificates).
+  </Step>
+</Steps>
+
+## Follow more addresses on your own node
+
+Live, the connection behind [notifications](/settings/notifications#make-live-follow-every-address), follows up to 200 addresses per wallet and 2,000 in all. Public servers limit how many addresses one app may follow.
+
+On a server you run, no one else sees your addresses. Its limits are yours to raise, so `This is my node` lets Live follow up to 20,000, all of them for one wallet if needed.
+
+<Note>
+Leave the switch off for a server you do not run. A public server would refuse most of the addresses past its own limit, and learn every one that Live asks it to follow.
+</Note>
+
+<Steps>
+  <Step title="Connect your own server">
+    Follow [Connect your own Esplora](#connect-your-own-esplora) or [Connect your own Electrum server](#connect-your-own-electrum-server).
+  </Step>
+  <Step title="Select the This is my node switch">
+    It sits under the address of your server.
+  </Step>
+  <Step title="Select Save backend">
+    Live reconnects with the longer list.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Android">
+    <Frame caption="With This is my node on, Live follows up to 20,000 addresses on your server.">
+      <img src="/images/android/settings-node-my-node.webp" alt="The Network screen on Android with My own Esplora selected, its server URL, and the This is my node switch turned on above Save backend." width="360" />
+    </Frame>
+  </Tab>
+  <Tab title="Desktop">
+    <Frame caption="With This is my node on, Live follows up to 20,000 addresses on your server.">
+      <img src="/images/desktop/settings-node-my-node.webp" alt="The Network section of the desktop settings with My own Esplora selected, its server URL, and the This is my node switch turned on above Save backend." />
+    </Frame>
+  </Tab>
+</Tabs>
+
+<Accordion title="Raise the subscription limit of your Electrum server">
+  Some server software lets one client follow fewer addresses than Live asks for on your own node. These settings let it follow all 20,000:
+
+  - **ElectrumX:** Set `COST_SOFT_LIMIT=0` and `COST_HARD_LIMIT=0`, or at least `10000` and `50000`. Left at their defaults, ElectrumX slows Live down until 20,000 addresses take more than 15 minutes.
+  - **Blockstream's electrs:** Set `--electrum-subscription-limit 0`, or at least `25000`. The default is 10,000.
+  - **mempool's electrs:** Set `--electrum-max-subscriptions 25000`. Raise `--electrum-txs-limit` too if one of your addresses has more transactions than it allows.
+  - **Fulcrum:** Nothing to change with the default `max_subs_per_ip` of 75,000. Raise it if your configuration sets it below 20,000.
+  - **electrs by romanz:** Nothing to change.
+
+  Then turn Live off and on again, with the `New transactions` switch on desktop, so that Gerfaut asks your node for every address at once. After a cut from ElectrumX, it [asks for fewer addresses until Live starts over](/settings/notifications#make-live-follow-every-address).
+</Accordion>

@@ -1,0 +1,180 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Gerfaut",
+  "colors": {
+    "primary": "#0E7490",
+    "light": "#7DD3E8",
+    "dark": "#0A5D75"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://gerfaut-wallet.com"
+  },
+  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "light"
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "fonts": {
+    "body": {
+      "family": "Instrument Sans",
+      "source": "https://gerfaut-wallet.com/fonts/instrument-sans/InstrumentSans-Variable.woff2",
+      "format": "woff2",
+      "weight": 400
+    },
+    "heading": {
+      "family": "Bricolage Grotesque",
+      "source": "https://gerfaut-wallet.com/fonts/bricolage-grotesque/BricolageGrotesque-Variable.woff2",
+      "format": "woff2",
+      "weight": 700
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#FFFFFF",
+      "dark": "#0B0F14"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Home",
+            "pages": [
+              "index"
+            ]
+          },
+          {
+            "group": "Getting started",
+            "pages": [
+              "getting-started/what-is-gerfaut",
+              "getting-started/install-android",
+              "getting-started/iphone-app",
+              "getting-started/install-desktop",
+              "getting-started/verify-your-download"
+            ]
+          },
+          {
+            "group": "Using Gerfaut",
+            "pages": [
+              {
+                "group": "Wallets",
+                "icon": "wallet",
+                "expanded": false,
+                "pages": [
+                  "wallets/overview",
+                  "wallets/add-a-wallet",
+                  "wallets/wallet-types",
+                  "wallets/watch-an-address",
+                  "wallets/policy-and-timelocks"
+                ]
+              },
+              {
+                "group": "Everyday use",
+                "icon": "activity",
+                "expanded": false,
+                "pages": [
+                  "everyday-use/overview",
+                  "everyday-use/balances-and-history",
+                  "everyday-use/transaction-details",
+                  "everyday-use/utxos",
+                  "everyday-use/receive-addresses",
+                  "everyday-use/broadcast-a-transaction"
+                ]
+              },
+              {
+                "group": "Settings",
+                "icon": "settings",
+                "expanded": false,
+                "pages": [
+                  "settings/overview",
+                  "settings/backends-and-your-own-node",
+                  "settings/certificates",
+                  "settings/tor",
+                  "settings/units-and-fiat",
+                  "settings/appearance",
+                  "settings/app-lock",
+                  "settings/backup-and-sync",
+                  "settings/notifications"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "icon": "history",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": [
+              "changelog/android",
+              "changelog/desktop"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Help",
+        "icon": "life-buoy",
+        "groups": [
+          {
+            "group": "Help",
+            "pages": [
+              "help/faq",
+              "help/contact"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "redirects": [
+    {
+      "source": "/premium/overview",
+      "destination": "/settings/notifications"
+    },
+    {
+      "source": "/premium/get-a-key",
+      "destination": "/settings/notifications"
+    },
+    {
+      "source": "/premium/devices",
+      "destination": "/settings/notifications"
+    },
+    {
+      "source": "/premium/watch-a-wallet",
+      "destination": "/settings/notifications"
+    },
+    {
+      "source": "/premium/channels",
+      "destination": "/settings/notifications"
+    },
+    {
+      "source": "/premium/limits",
+      "destination": "/settings/notifications"
+    },
+    {
+      "source": "/premium/delete-your-data",
+      "destination": "/settings/notifications"
+    }
+  ],
+  "footer": {
+    "socials": {
+      "github": "https://github.com/gerfaut-dev/gerfaut-docs"
+    }
+  },
+  "integrations": {
+    "telemetry": {
+      "enabled": false
+    }
+  }
+}

@@ -1,0 +1,62 @@
+---
+title: "Verify a download"
+description: "Prove that a Gerfaut installer or APK is the file the author published, by checking it against the signed hash list of its release."
+---
+
+Check a downloaded file against `SHA256SUMS`, the hash list of its release, signed with the author's [minisign](https://jedisct1.github.io/minisign/) key. The author's public key is:
+
+```
+RWTz3c4gUmglCX5Uvjthigz1ts3TS3ZSdhRNpFgOJRW/Wr4XjGlqTR3O
+```
+
+## Verify a file
+
+<Steps>
+  <Step title="Install minisign">
+    Get it from the [minisign page](https://jedisct1.github.io/minisign/) or from your package manager.
+  </Step>
+  <Step title="Download the hash list and its signature">
+    Take `SHA256SUMS` and `SHA256SUMS.minisig` from the release page of your file, and put all three in one folder.
+  </Step>
+  <Step title="Check the signature of the hash list">
+    From that folder, run:
+
+    ```bash
+    minisign -Vm SHA256SUMS -P RWTz3c4gUmglCX5Uvjthigz1ts3TS3ZSdhRNpFgOJRW/Wr4XjGlqTR3O
+    ```
+
+    minisign prints `Signature and comment signature verified` when the list comes from the author.
+
+    <Warning>
+    Any other answer means someone altered the list or signed it in the author's place. Do not use the file.
+    </Warning>
+  </Step>
+  <Step title="Check that your file matches the list">
+    <Tabs>
+      <Tab title="Linux">
+        ```bash
+        sha256sum --check SHA256SUMS --ignore-missing
+        ```
+
+        The command prints `OK` after the name of your file.
+      </Tab>
+      <Tab title="macOS">
+        ```bash
+        shasum -a 256 --check SHA256SUMS --ignore-missing
+        ```
+
+        The command prints `OK` after the name of your file.
+      </Tab>
+      <Tab title="Windows">
+        In PowerShell, compute the hash of your file and find its line in the list:
+
+        ```powershell
+        (Get-FileHash .\<file>).Hash.ToLower()
+        Select-String <file> SHA256SUMS
+        ```
+
+        The two hashes must be identical, letter for letter.
+      </Tab>
+    </Tabs>
+  </Step>
+</Steps>

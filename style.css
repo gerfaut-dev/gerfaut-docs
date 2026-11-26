@@ -1,0 +1,342 @@
+/* Gerfaut documentation: overrides on top of the Mintlify mint theme.
+   Colors follow the Gerfaut palette. Rules target documented Mintlify
+   selectors, except the header and clip rules, which also lean on its
+   markup: check them after a Mintlify update. */
+
+/* Fonts: the apps' and the site's three faces, served by
+   gerfaut-wallet.com, never by Google. docs.json can only give one weight
+   per family and has no mono setting; these faces declare each variable
+   font's whole range, so bold text uses the real weights. */
+
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("https://gerfaut-wallet.com/fonts/instrument-sans/InstrumentSans-Variable.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("https://gerfaut-wallet.com/fonts/bricolage-grotesque/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("https://gerfaut-wallet.com/fonts/jetbrains-mono/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+/* Identifiers, addresses and code in the apps' mono face. */
+
+code,
+pre,
+kbd,
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+}
+
+:root {
+  --gf-tip: #116b41;
+  --gf-tip-surface: #dcf5e6;
+  --gf-tip-border: #a9dfc0;
+  --gf-note: #745400;
+  --gf-note-surface: #fdf0cf;
+  --gf-note-border: #ead79b;
+  --gf-warning: #b3261e;
+  --gf-warning-surface: #fde7e7;
+  --gf-warning-border: #f3b8b5;
+  --gf-border: #c7d2db;
+  --gf-surface-sunken: #ebf0f4;
+  --gf-text: #0d1317;
+  --gf-primary: #0e7490;
+}
+
+.dark {
+  --gf-tip: #50b771;
+  --gf-tip-surface: rgba(80, 183, 113, 0.14);
+  --gf-tip-border: rgba(80, 183, 113, 0.4);
+  --gf-note: #c1983a;
+  --gf-note-surface: rgba(193, 152, 58, 0.14);
+  --gf-note-border: rgba(193, 152, 58, 0.4);
+  --gf-warning: #ff706d;
+  --gf-warning-surface: rgba(255, 112, 109, 0.14);
+  --gf-warning-border: rgba(255, 112, 109, 0.4);
+  --gf-border: #2a3440;
+  --gf-surface-sunken: #1f2933;
+  --gf-text: #e6ecf2;
+  --gf-primary: #7dd3e8;
+}
+
+/* Callouts: three levels only.
+   Tip = green, no risk. Note = amber, moderate risk.
+   Warning = red, bitcoin or privacy at stake. */
+
+.callout[data-callout-type="tip"] {
+  background-color: var(--gf-tip-surface);
+  border-color: var(--gf-tip-border);
+}
+
+.callout[data-callout-type="tip"],
+.callout[data-callout-type="tip"] * {
+  color: var(--gf-tip);
+}
+
+.callout[data-callout-type="note"] {
+  background-color: var(--gf-note-surface);
+  border-color: var(--gf-note-border);
+}
+
+.callout[data-callout-type="note"],
+.callout[data-callout-type="note"] * {
+  color: var(--gf-note);
+}
+
+.callout[data-callout-type="warning"] {
+  background-color: var(--gf-warning-surface);
+  border-color: var(--gf-warning-border);
+}
+
+.callout[data-callout-type="warning"],
+.callout[data-callout-type="warning"] * {
+  color: var(--gf-warning);
+}
+
+.callout {
+  border-radius: 12px;
+}
+
+/* Header: Guides, Changelog and Help sit in the top bar, left of the
+   theme menu, instead of a second row under it. The empty list of navbar
+   links keeps their room, the tab row leaves the flow, and Mintlify's tab
+   height variable drops to zero so the sidebar and anchors follow. */
+
+@media (min-width: 1024px) {
+  :root {
+    --topbar-tabs-height: 0rem !important;
+  }
+
+  #navbar nav[aria-label="Main"] {
+    width: 17.5rem;
+  }
+
+  #navbar div:has(> .nav-tabs) {
+    position: absolute;
+    top: 0;
+    right: 6rem;
+    height: 4rem;
+    padding: 0;
+  }
+}
+
+/* The first group of a tab needs no header: Home holds one page, and the
+   Changelog and Help tabs already name their only group. */
+
+#navigation-items > div:first-child .sidebar-group-header {
+  display: none;
+}
+
+/* Previous / next: real buttons with a visible hover. */
+
+#pagination {
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+#pagination a {
+  flex: 1 1 0;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--gf-border);
+  border-radius: 12px;
+  background-color: transparent;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+#pagination a:hover {
+  background-color: var(--gf-surface-sunken);
+  border-color: var(--gf-primary);
+  color: var(--gf-primary);
+}
+
+#pagination a:hover span,
+#pagination a:hover svg {
+  color: var(--gf-primary);
+  stroke: var(--gf-primary);
+}
+
+#pagination a:focus-visible {
+  outline: 2px solid var(--gf-primary);
+  outline-offset: 2px;
+}
+
+#pagination a:last-child {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* Phone screenshots: the device frame is part of the image, so the
+   Mintlify frame loses its card, grid and border and only centers it. */
+
+.frame:has(img[width="360"]) {
+  background-color: transparent !important;
+  padding: 0;
+}
+
+.frame:has(img[width="360"]) > div.absolute {
+  display: none;
+}
+
+.frame:has(img[width="360"]) img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Phone clips: the device frame is part of the video too. The video
+   gets the corner radius and the shadow of the phone screenshots. */
+
+.frame:has(video.phone-video) {
+  background-color: transparent !important;
+  padding: 0;
+}
+
+.frame:has(video.phone-video) > div.absolute {
+  display: none;
+}
+
+video.phone-video {
+  display: block;
+  width: 338px;
+  max-width: 94%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 7.75% / 3.56%;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.35);
+}
+
+/* Desktop screenshots and clips keep their card, with a hairline border. */
+
+.frame:not(:has(img[width="360"])):not(:has(video.phone-video)) {
+  border: 1px solid var(--gf-border);
+}
+
+/* Clip bar (clip-bar.js): a pause button and a progress track under
+   every clip. The track grows and shows its thumb on hover, on focus,
+   while dragging and while the clip is paused. */
+
+.frame div:has(> video) {
+  flex-direction: column;
+}
+
+.gf-clip-bar {
+  --gf-rail: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0 0.5rem 0 0.125rem;
+}
+
+video.phone-video + .gf-clip-bar {
+  width: 338px;
+  max-width: 94%;
+  margin: 0.75rem auto 0;
+}
+
+.gf-clip-bar__toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 8px;
+  color: var(--gf-text);
+  opacity: 0.7;
+  transition: background-color 150ms ease, color 150ms ease, opacity 150ms ease;
+}
+
+.gf-clip-bar__toggle svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.gf-clip-bar__toggle:hover {
+  background-color: var(--gf-surface-sunken);
+  color: var(--gf-primary);
+  opacity: 1;
+}
+
+.gf-clip-bar__track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 1.25rem;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.gf-clip-bar__track::before,
+.gf-clip-bar__fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: var(--gf-rail);
+  border-radius: 999px;
+  transform: translateY(-50%);
+  transition: height 150ms ease;
+}
+
+.gf-clip-bar__track::before {
+  content: "";
+  right: 0;
+  background-color: var(--gf-border);
+}
+
+.gf-clip-bar__fill {
+  width: calc(var(--gf-progress, 0) * 100%);
+  background-color: var(--gf-primary);
+}
+
+.gf-clip-bar__thumb {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--gf-progress, 0) * 100%);
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+  background-color: var(--gf-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 150ms ease;
+}
+
+.gf-clip-bar:hover,
+.gf-clip-bar.is-dragging,
+.gf-clip-bar:has(.gf-clip-bar__track:focus-visible) {
+  --gf-rail: 6px;
+}
+
+.gf-clip-bar:hover .gf-clip-bar__thumb,
+.gf-clip-bar.is-paused .gf-clip-bar__thumb,
+.gf-clip-bar.is-dragging .gf-clip-bar__thumb,
+.gf-clip-bar__track:focus-visible .gf-clip-bar__thumb {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.gf-clip-bar__toggle:focus-visible,
+.gf-clip-bar__track:focus-visible {
+  outline: 2px solid var(--gf-primary);
+  outline-offset: 2px;
+}
+
+.gf-clip-bar__track:focus-visible {
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gf-clip-bar *,
+  .gf-clip-bar *::before {
+    transition: none;
+  }
+}
